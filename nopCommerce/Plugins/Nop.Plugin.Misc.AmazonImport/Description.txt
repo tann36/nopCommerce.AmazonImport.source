@@ -1,0 +1,8 @@
+﻿Group: Misc
+FriendlyName: Amazon Product Import
+SystemName: Misc.AmazonImport
+Version: 1.0
+SupportedVersions: 3.10
+Author: UpTime
+DisplayOrder: 1
+FileName: Nop.Plugin.Misc.AmazonImport.dll

@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "";
+}
+@model Nop.Plugin.Misc.AmazonImport.Models.ConfigurationModel
+@using (Html.BeginForm())
+{
+	<table class="adminContent">
+		<tr>
+			<td class="adminTitle">
+				@Html.NopLabelFor(model => model.UpdatingEnabled):
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.UpdatingEnabled)
+			</td>
+		</tr>
+
+		<tr>
+			<td class="adminTitle">
+				@Html.NopLabelFor(model => model.UpdateInterval):
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.UpdateInterval)
+			</td>
+		</tr>
+
+		<tr>
+			<td>
+				<input type="button" class="t-button" value="@T("Admin.Common.Save")" />
+			</td>
+		</tr>
+	</table>
+}

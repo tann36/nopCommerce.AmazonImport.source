@@ -1,0 +1,108 @@
+﻿@{
+	Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+}
+@model Nop.Plugin.Misc.AmazonImport.Models.AmazonImportModel.AmazonKeywordSearchModel
+@using Telerik.Web.Mvc.UI
+@{    
+    //page title
+	ViewBag.Title = T("Plugins.Misc.AmazonImport.SearchAmazon").Text;
+}
+
+@using (Html.BeginForm())
+{
+	//111 formi sisu võiks olla partial classis 
+	
+	<div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            <span>@T("Plugins.Misc.AmazonImport.SearchAmazon")</span>
+        </div>
+    </div>
+	
+	<table class="adminContent">
+		<tr>
+			<td class="adminTitle">
+				@Html.NopLabelFor(model => model.Keywords):
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.Keywords)
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<input type="button" id="search-amazon" class="t-button" value=@T("Plugins.Misc.AmazonImport.Search") />
+			</td>
+		</tr>
+	</table>
+	
+	<br/>
+	
+	<table class="adminContent">
+        <tr>
+            <td>
+                @(Html.Telerik().Grid<Nop.Plugin.Misc.AmazonImport.Models.AmazonImportModel.AmazonSearchResultModel>()
+                    .Name("results-grid")
+                    .Columns(columns =>
+                    {
+						columns.Bound("")
+							.ClientTemplate("<button class='t-button' onclick=\"window.open('/Plugins/MiscAmazonImport/CreateFromASIN?ASIN=<#= ASIN #>'); return false;\">" + T("Plugins.Misc.AmazonImport.AddToStore") + "</button>")
+							.Width(90);
+                        columns.Bound(x => x.ImageUrl)
+							.ClientTemplate("<img alt='<#= Title #>' src='<#= ImageUrl #>' style='height:100px;'/>")
+							.Width(200);
+                        columns.Bound(x => x.Title)
+							.ClientTemplate("<div style='margin-top:10px;'><#= Title #></div><div><button class='toggleButton t-button' style='margin-top:10px;' onclick='return false;'>Show/hide description</button><div hidden='hidden'><div><#= Description #></div><div><#= EditorialReviews #></div></div></div>");
+						columns.Bound(x => x.Price);
+                    })
+                     .Pageable(settings => settings.PageSize(15).Position(GridPagerPosition.Both))
+                     //.DataBinding(dataBinding => dataBinding.Ajax().Select("SearchAmazon", "Product"))
+					 .DataBinding(dataBinding => dataBinding.Ajax().Select("SearchAmazon", "MiscAmazonImport"))
+                     .ClientEvents(events => events.OnDataBinding("onDataBinding").OnDataBound("onDataBound"))
+                     .EnableCustomBinding(true))
+            </td>
+        </tr>
+    </table>
+	
+	<script type="text/javascript">
+
+		$(document).ready(function () {
+
+    		//search button
+    		$('#search-amazon').click(function () {
+    			//search
+    			var grid = $('#results-grid').data('tGrid');
+    			grid.currentPage = 1; //new search. Set page size to 1
+    			grid.ajaxRequest();
+    			return false;
+    		});
+
+    		$("#@Html.FieldIdFor(model => model.Keywords)").keydown(function (event) {
+    			if (event.keyCode == 13) {
+    				$("#search-amazon").click();
+    				return false;
+    			}
+    		});
+						
+			
+
+		});
+
+		function onDataBinding(e) {
+			var searchModel = 
+			{
+				Keywords: $('#@Html.FieldIdFor(model => model.Keywords)').val()
+            };
+			e.data = searchModel;
+		}
+
+		function onDataBound(e) {
+			$(".toggleButton").click(function (event) {
+				$(event.target).siblings().toggle("fast");
+			});
+		}
+
+
+	</script>
+ 
+}
+

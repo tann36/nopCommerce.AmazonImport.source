@@ -1,0 +1,41 @@
+﻿@{
+	Layout = "~/Administration/Views/Shared/_AdminLayout.cshtml";
+}
+@model Nop.Plugin.Misc.AmazonImport.Models.AmazonImportModel.CreateFromASINModel
+@{    
+    //page title
+	ViewBag.Title = T("Plugins.Misc.AmazonImport.CreateFromASIN").Text;
+}
+
+
+@using (Html.BeginForm())
+{
+	//111 formi sisu võiks olla partial views 
+	
+	<div class="section-header">
+        <div class="title">
+            <img src="@Url.Content("~/Administration/Content/images/ico-catalog.png")" alt="" />
+            <span>@T("Plugins.Misc.AmazonImport.CreateFromASIN")</span>
+        </div>        
+    </div>
+	
+	<table class="adminContent">
+		<tr>
+			<td class="adminTitle">
+				@Html.NopLabelFor(model => model.ASIN):
+			</td>
+			<td class="adminData">
+				@Html.EditorFor(model => model.ASIN)
+				<span style="color:red;">
+					@Html.ValidationMessageFor(model => model.ASIN)
+				</span>
+			</td>
+		</tr>
+		<tr>
+			<td class="adminTitle">
+				<input type="submit" name="create" class="t-button" value=@T("Plugins.Misc.AmazonImport.Create") />
+			</td>
+		</tr>
+	</table>
+ 
+}
